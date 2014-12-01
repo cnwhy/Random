@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>simple document</title>
+<script src='Random.js'></script>
+</head>
+<body>
+<script>
+var rarr1 = [],
+    rarr2 = [];
+var n = 100000;
+for (var i = 0; i < n; i++) {
+	rarr1.push(Random.getInt(0, 9))
+	rarr2.push(Random.getBool(0.35))
+}
+
+var nb =[];
+rarr1.forEach(function (v) {
+    if(nb[v]){
+       nb[v] += 1 
+    }else{
+        nb[v] = 1
+    }
+})
+nb.forEach(function(v,i){
+    nb[i] = v/n;
+})
+console.log(nb);
+
+var t = 0, 
+    f = 0;    
+rarr2.forEach(function (v) {
+    if(v)
+        t+=1;
+    else
+        f+=1;
+})
+console.log(t/n);
+function RColor(){
+    var d1 = document.getElementById('d1');
+    d1.style.color = "#" + Random.getHexRGB(-150,100,[50,100]);
+    d1.style.backgroundColor = "#" + Random.getHexRGB(-220,-220,-220);
+}
+</script>
+<div style="background:#EEE; padding:10px;">
+    <div id="d1" style="color:#333;font-size:40px;width:400px;text-align:center;padding:30px; margin:10px; font-weight:bold;">Random</div>
+    <button onclick="RColor();">改变颜色</button>
+</div>
+</body>
+</html>
