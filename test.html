@@ -3,49 +3,168 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Random Test</title>
+<script src='http://libs.baidu.com/jquery/1.11.1/jquery.min.js'></script>
 <script src='Random.js'></script>
+<script>
+$(function(){
+	$('.demo').each(function(){
+		var o = $(this);
+		var d = $('<div class="codebox"><a href="#">显示源码</a><pre></pre></div>')
+		d.find('pre').text(o.html().replace(/^\n/,'')).hide();
+		d.find('a').on('click',function(){
+			d.find('pre').toggle(200,'linear');
+			return false;
+		});
+		o.after(d)
+	})
+})
+</script>
+<style>
+	.codebox {font-size:12px;}
+	pre {padding:10px; margin:5px 0; background:#EEE; color:#333; overflow:auto;}
+</style>
 </head>
 <body>
-<script>
-var rarr1 = [],
-    rarr2 = [];
-var n = 100000;
-for (var i = 0; i < n; i++) {
-	rarr1.push(Random.getInt(0, 9))
-	rarr2.push(Random.getBool(0.35))
-}
-
-var nb =[];
-rarr1.forEach(function (v) {
-    if(nb[v]){
-       nb[v] += 1 
-    }else{
-        nb[v] = 1
-    }
-})
-nb.forEach(function(v,i){
-    nb[i] = v/n;
-})
-console.log(nb);
-
-var t = 0, 
-    f = 0;    
-rarr2.forEach(function (v) {
-    if(v)
-        t+=1;
-    else
-        f+=1;
-})
-console.log(t/n);
-function RColor(){
-    var d1 = document.getElementById('d1');
-    d1.style.color = "#" + Random.getHexRGB(-150,100,[50,100]);
-    d1.style.backgroundColor = "#" + Random.getHexRGB(-220,-220,-220);
-}
-</script>
-<div style="background:#EEE; padding:10px;">
-    <div id="d1" style="color:#333;font-size:40px;width:400px;text-align:center;padding:30px; margin:10px; font-weight:bold;">Random</div>
-    <button onclick="RColor();">改变颜色</button>
+<div class="demo">
+	<h2>随机整数</h2>
+	<p>
+		范围<input type="text" name="v_min" value="0" size="3"> to <input type="text" name="v_max" value="100" size="3">
+		<button onclick="Rint()">确定</button> <input type="text" name="v_v" readonly value="" size="2">
+	</p>
+	<script>
+		function Rint(){
+			var min = $('[name="v_min"]').val();
+			var max = $('[name="v_max"]').val();
+			$('[name="v_v"]').val(Random.getInt(min,max))
+		}
+	</script>
 </div>
+<div class="demo">
+	<style>
+	.boolbox {padding:10px; disabled:none; background:#EEE; display:none;}
+	.boolbox{*zoom:1}
+	.boolbox:after{display:block;visibility:hidden;clear:both;height:0;content:'\20'}
+	.boolbox>i,.boolbox>b {display:block; float:left; margin:0 1px 1px 0; width:5px; height:5px; font-size:0; background:#999;}
+	.boolbox>b {background:#55F;}
+	</style>
+	<h2>随机布尔值</h2>
+	<p>
+		为true几率:<input type="text" id="v_true" value="0.5" size="3"> 
+		生成个数:<input type="text" id="v_bn" value="1000" size="6"> 
+		<label>图型显示:<input type="checkbox" id="b_ui" checked></label>
+		<button onclick="RBool()">确定</button>
+		<span id="boolmsg"></span>
+	</p>
+	<div id="boolbox" class="boolbox"></div>
+	<script>
+		var b_ui = $('#b_ui')
+			,boolbox = $('#boolbox')
+			,boolmsg = $('#boolmsg')
+		b_ui.on('change',function(){$(this).prop("checked") || boolbox.hide();})
+		function RBool(){
+			var t = +$('#v_true').val();
+			var n = +$('#v_bn').val();
+			var bools = [],tn = 0;
+			for(var i=n; i--;){
+				var rBool = Random.getBool(t) //生成随机bool值
+				bools.push(rBool)
+			}
+			for(var ii=0; ii<bools.length; ii++){
+				bools[ii] && tn++;
+			}
+			var html = '生成' + n + '次,<strong>true</strong> ' + tn + '次(<span style="color:red;">' + (tn/n*100)  + '%</span>)';
+			boolmsg.html(html);
+			b_ui.prop("checked") && showBool(bools);
+		}
+		function showBool(arr){
+			var html = ''
+			for(var i=0; i<arr.length; i++){
+				html += arr[i] ? '<b></b>' : '<i></i>';
+			}
+			boolbox.html(html).show();
+		}
+	</script>
+</div>
+<div class="demo">
+	<h2>随机颜色</h2>
+	<button onclick="RColor();">随机改变颜色</button> <button onclick="RColor1();">文字深背景浅</button> <button onclick="RColor2();">文字红色系背景蓝色系</button>
+	<div id="d1" style="color:#333; background:#EEE; padding:10px; margin:10px; font-size:30px;width:400px;text-align:center;padding:20px; font-weight:bold;">Random</div>
+	<script>
+		var d1 = document.getElementById('d1');
+		function RColor(){
+			d1.style.color = "#" + Random.getHexRGB();
+			d1.style.backgroundColor = "#" + Random.getHexRGB();
+
+		}
+		function RColor1(){
+			d1.style.color = "#" + Random.getHexRGB(150,150,150);
+			d1.style.backgroundColor = "#" + Random.getHexRGB(-200,-200,-200);
+		}
+		function RColor2(){
+			d1.style.color = "#" + Random.getHexRGB(-180,80,80);
+			d1.style.backgroundColor = "#" + Random.getHexRGB(80,80,-180);
+		}
+	</script>
+</div>
+<div class="demo">
+	<style>
+	.arrbox {min-height:200px; min-width:100%; position:relative; display:-moz-box; display:-webkit-box; display:box; background:#EEE; margin:10px 0;}
+	.arrbox>div {position:relative; height:100%; -moz-box-flex:1; -webkit-box-flex:1; box-flex:1; }
+	.arrbox>div>b {display:block;position:absolute; bottom:0; left:0; width:50%; box-sizing:border-box; max-width:30px; background:#999;}
+	</style>
+	<h2>打乱数组</h2>
+	<div>
+		数组长度:<input type="text" name="arr_long" size="5" value="200">
+		<button onclick="RNewArr();">生成数组</button>
+		<button onclick="RarrUpset();">打乱数组</button>
+		<button onclick="RarrUpsetShuffle();">打乱数组(洗牌算法1次)</button>
+		<button onclick="RarrUpsetShuffle(4);">打乱数组(洗牌算法4次)</button>
+		<span id="arrmsg"></span>
+	</div>
+	<div class="arrbox" style="display:none;"></div>
+	<script>
+		var arr=[];
+		var msg1 = '';
+		function RNewArr(){
+			var t1 = new Date();
+			var arr_ = [];
+			var l = +$('[name="arr_long"]').val();
+			for(var i=1; i<=l; i++){
+				arr_.push(i);
+			}
+			msg1 = "生成数组耗时:" + (new Date()-t1);
+			arr=arr_
+			show(arr);
+		}
+		function RarrUpset(){
+			var t1 = new Date();
+			Random.arrUpset(arr);
+			msg1 = "打乱耗时:" + (new Date()-t1);
+			show(arr);
+		}
+		function RarrUpsetShuffle(n){
+			var t1 = new Date();
+			Random.arrUpsetShuffle(arr,n);
+			msg1 = "打乱耗时:" + (new Date()-t1);
+			show(arr);
+		}
+		function show(arr){
+			var t1 = new Date();
+			var l = arr.length
+			var box = $('.arrbox').show();
+			box.html('');
+			box.css('width',l*2+"px")
+			box.css("height",l+"px");
+			var html=""
+			for(var i=0; i<l; i++){
+				var v = arr[i];
+				html += '<div><b style="height:' + (v/l*100) + '%"></b></div>';
+			}
+			box.html(html);
+			$("#arrmsg").text(msg1 + " 渲染耗时:" + (new Date()-t1));
+		}
+	</script>
+</div>
+<br><br><br>
 </body>
 </html>
