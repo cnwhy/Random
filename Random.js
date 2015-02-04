@@ -1,10 +1,21 @@
+;(function (name, factory) {
+	// Support AMD
+	if (typeof define === 'function' && define.amd) {
+		define([], factory);
+	// Support CommonJS
+	} else if (typeof module !== 'undefined' && module.exports) {
+		exports = module.exports = factory();
+	} else {
+		this[name] = factory();
+	};
+}('Random', function () {
+
 var Random = {};
 
 //随机整数,数值范围min,max可对调
 Random.getInt = function (min, max) {
 	var _min = Math.ceil(Math.min(min, max))
 		,_max = Math.floor(Math.max(min, max));
-	console.log(_min,_max);
 	return _min + Math.floor((Math.abs(_min - _max) + 1) * Math.random()) + 0;
 }
 
@@ -102,25 +113,27 @@ Random.arrUpset = function(arr){
 *n [Number]打乱次数
 */
 Random.arrUpsetShuffle = function(arr,n){
-	n = n ? (n > 1 ? n : 1) : 1;
+	n = Math.max(1,n||1);
 	var l = arr.length
-		,r = arr.length>>1
-		,z = l-r;
+		,r = arr.length>>1;
 	for(var i=0;i<n; i++){
-		console.log("1");
+		var z = l-r;
 		var arr_p = arr.splice(Random.getInt(0,z),r);
 		while(arr_p.length>0){
-			arr.splice(Random.getInt(0,++z),0,arr_p.pop())
+			arr.splice(Random.getInt(0,++z),0,arr_p.pop());
 		}
 	}
 }
-
-
 
 // function arrUpset1(arr) {
 	// arr.sort(function () {
 		// return 0.5 - Math.random()
 	// })
 // }
+
+;return Random
+}));
+
+
 
 
