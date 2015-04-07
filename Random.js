@@ -12,11 +12,15 @@
 
 var Random = {};
 
-//随机整数,数值范围min,max可对调
-Random.getInt = function (min, max) {
-	var _min = Math.ceil(Math.min(min, max))
-		,_max = Math.floor(Math.max(min, max));
-	return _min + Math.floor((Math.abs(_min - _max) + 1) * Math.random()) + 0;
+//随机整数,数值范围min,max可对调;b bool值,是否排除边界值.
+Random.getInt = function (min, max , b) {
+	var _min = Math.ceil(Math.min(min, max)),
+	_max = Math.floor(Math.max(min, max));
+	if(b){
+		_min = Math.min(min, max) == _min ? _min+1 : _min;
+		_max = Math.max(min, max) == _max ? _max-1 : _max;
+	}
+	return _min + Math.floor((_max - _min + 1) * Math.random()) + 0;
 }
 
 /**随机布尔值,p为真的几率,默认0.5**/
@@ -25,10 +29,19 @@ Random.getBool = function (p) {
 	return Math.random() < p;
 }
 
+/**模拟生成GUID**/
+Random.getGUID = function() {
+    function S4() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
 /**随机颜色**/
-var isArray = function(obj) { 
+var isArray = function(obj) {
 	return Object.prototype.toString.call(obj) === '[object Array]'; 
 }
+
 function toArr(a,min,max){
 	if(isArray(a) && a[0]>=min && a[0]<=max && a[1]>=min && a[1]<=max){
 		return a;
@@ -133,7 +146,3 @@ Random.arrUpsetShuffle = function(arr,n){
 
 ;return Random
 }));
-
-
-
-
