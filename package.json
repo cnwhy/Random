@@ -1,12 +1,12 @@
 {
   "name": "Random",
   "version": "0.0.1",
-  "description": "常用随机数类 随机整数,随机真假,随机颜色,随机数组\r # Demo  \r [openDemo](http://cnwhy.github.io/Random/)",
+  "description": "常用随机数类 随机整数,随机真假,随机颜色,随机数组\r # Demo  \r [Demo](http://cnwhy.github.io/Random/)",
   "keywords": [],
-  "main": "./Random.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "Random.js",
+  "files": [
+    "Random.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/cnwhy/Random.git"
@@ -16,7 +16,5 @@
   "bugs": {
     "url": "https://github.com/cnwhy/Random/issues"
   },
-  "homepage": "http://cnwhy.github.io/Random",
-  "dependencies": {},
-  "devDependencies": {}
+  "homepage": "http://cnwhy.github.io/Random"
 }
